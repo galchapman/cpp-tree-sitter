@@ -1,0 +1,10 @@
+bin/
+build/
+*.out
+*.elf
+*.o
+*.a
+*.so
+*.exe
+*.dll
+*.lib
