@@ -1,7 +1,6 @@
 #include "tree.hpp"
 #include "node.hpp"
 #include "tree_cursor.hpp"
-#include <iostream>
 
 namespace ts {
 
@@ -11,7 +10,6 @@ Tree::Tree(TSTree* tree, const string& source, bool keep_text) {
 }
 
 Tree::~Tree() {
-	std::cout << "deleted tree" << std::endl;
 	ts_tree_delete(tree);
 }
 
