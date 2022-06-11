@@ -4,7 +4,7 @@ CCC=g++
 LD=ld
 AR=ar
 
-FLAGS=-Isrc/core/lib/src -Isrc/core/lib/include
+FLAGS=-Isrc/core/lib/src -Isrc/core/lib/include -g
 CFLAGS=$(FLAGS) -std=c99
 CCFLAGS=$(FLAGS) -std=c++20 
 
@@ -23,5 +23,5 @@ libtree-sitter-cpp.o: $(OBJS) libtree-sitter.o
 libtree-sitter-cpp.a: libtree-sitter-cpp.o
 	$(AR) rcs $@ $^
 
-src/%.o: src/%.cpp $(HDRS)
+src/%.o: src/%.cpp $(CCC CCFLAGS -M src/%.cpp)
 	$(CCC) $(CCFLAGS) -c $< -o $@

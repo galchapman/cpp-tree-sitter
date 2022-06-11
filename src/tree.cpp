@@ -10,7 +10,7 @@ Tree::Tree(TSTree* tree, const string& source, bool keep_text) {
 }
 
 Node Tree::rootNode() {
-	return Node(ts_tree_root_node(tree), this->shared_from_this());
+	return Node(ts_tree_root_node(tree), shared_from_this());
 }
 
 const Node Tree::rootNode() const {
@@ -25,7 +25,7 @@ const string& Tree::text() const {
 }
 
 TreeCursor Tree::walk() {
-	return TreeCursor(Node(ts_tree_root_node(tree), this->shared_from_this()), this->shared_from_this());
+	return TreeCursor(Node(ts_tree_root_node(tree), shared_from_this()), shared_from_this());
 }
 
 const TreeCursor Tree::walk() const {

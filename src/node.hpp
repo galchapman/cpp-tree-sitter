@@ -5,6 +5,7 @@
 #include "ts.hpp"
 #include "children.hpp"
 #include "point.hpp"
+#include "symbol.hpp"
 #include "ts.hpp"
 
 namespace ts {
@@ -22,6 +23,7 @@ public:
 
 	long id() const;
 	string type() const;
+	Symbol symbol() const;
 	string text() const;
 
 	TreeCursor walk();

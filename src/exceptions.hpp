@@ -5,36 +5,41 @@
 
 namespace ts {
 
-class execption : std::exception {
+class exception : public std::exception {
 public:
 	virtual const char* what() const noexcept = 0;
 };
 
-class NullNodeException : execption {
+class NullNodeException : public exception {
+public:
 	virtual const char* what() const noexcept override {
 		return "Null Node";
 	}
 };
 
-class NullNameException : execption {
+class NullNameException : public exception {
+public:
 	virtual const char* what() const noexcept override {
 		return "Null Name";
 	}
 };
 
-class NullLanguageException : execption {
+class NullLanguageException : public exception {
+public:
 	virtual const char* what() const noexcept override {
 		return "Language ID must not be null";
 	}
 };
 
-class IncompatibleLanguageVersionException : execption {
+class IncompatibleLanguageVersionException : public exception {
+public:
 	virtual const char* what() const noexcept override {
 		return "Incompatible Language version";
 	}
 };
 
-class NullSourceException : execption {
+class NullSourceException : public exception {
+public:
 	virtual const char* what() const noexcept override {
 		return "Source code is NULL";
 	}
