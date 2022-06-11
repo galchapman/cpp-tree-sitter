@@ -11,3 +11,6 @@ build/
 
 tests/
 .vscode/
+
+languages/*.hpp
+languages/*_parser.c
