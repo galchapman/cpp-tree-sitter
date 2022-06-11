@@ -1,6 +1,7 @@
 #pragma once
 
 #include "tree_sitter/api.h"
+#include <ostream>
 
 namespace ts {
 
@@ -12,5 +13,7 @@ public:
 	TSSymbol symbol;
 	const char* name;
 };
+
+std::ostream& operator<<(std::ostream&, Symbol);
 
 }
