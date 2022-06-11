@@ -28,7 +28,7 @@ Symbol Node::symbol() const {
 }
 
 string Node::text() const {
-	return tree->text().substr(startByte(), startByte());
+	return tree->text().substr(startByte(), endByte() - startByte());
 }
 
 TreeCursor Node::walk() {
