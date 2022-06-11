@@ -14,7 +14,6 @@ Node::Node(TSNode node, std::shared_ptr<Tree> tree)
 	}
 }
 
-Node::Node(const Node& other) : node(node), tree(tree) {}
 
 long Node::id() const {
 	return *(const long*)node.id;
@@ -80,32 +79,33 @@ size_t Node::namedChildrenCount() const {
 	return ts_node_named_child_count(node);
 }
 
-std::shared_ptr<Children> Node::children() {
+Children Node::children() {
 	if (m_children.get() == nullptr) {
 		auto children = std::make_shared<std::vector<Node>>();
-		children->reserve((long)ts_node_child_count(node));
-		if (children->size() != 0) {
+		auto size = (long)ts_node_child_count(node);
+		children->reserve(size);
+		if (size != 0) {
 			ts_tree_cursor_reset(&cursor, node);
 			ts_tree_cursor_goto_first_child(&cursor);
 
 			size_t i = 0;
 			do {
 				TSNode child = ts_tree_cursor_current_node(&cursor);
-				children->emplace_back(Node(child, tree));
+				children->emplace_back(child, tree);
 				i++;
 			} while (ts_tree_cursor_goto_next_sibling(&cursor));
 		}
 
 		m_children = children;
 	}
-	return m_children;
+	return *m_children;
 }
 
 Children Node::namedChildren() {
 	size_t named_count = ts_node_named_child_count(node);
 	std::vector<Node> result;
 	result.reserve(named_count);
-	for (const auto& child : *children()) {
+	for (const auto& child : children()) {
 		if (child.isNamed()) {
 			result.emplace_back(child);
 		}

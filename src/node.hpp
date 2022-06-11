@@ -17,7 +17,6 @@ class Node {
 public:
 
 	Node(TSNode, std::shared_ptr<Tree>);
-	Node(const Node&);
 	~Node() = default;
 
 
@@ -45,7 +44,7 @@ public:
 	size_t childrenCount() const;
 	size_t namedChildrenCount() const;
 
-	std::shared_ptr<Children> children();
+	Children children();
 	Children namedChildren();
 	Children childrenByFieldID(TSFieldId);
 	Children childrenByFieldName(const string& name);

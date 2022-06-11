@@ -13,6 +13,7 @@ class Node;
 class Tree : public std::enable_shared_from_this<Tree> {
 public:
 	Tree(TSTree* tree, const string& source, bool keep_text);
+	~Tree();
 
 	inline static std::shared_ptr<Tree> create(TSTree* tree, const string& source, bool keep_text) {
 		return std::make_shared<Tree>(tree, source, keep_text);

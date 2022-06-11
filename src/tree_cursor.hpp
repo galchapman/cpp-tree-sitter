@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ts.hpp"
+#include "node.hpp"
 
 namespace ts {
 
@@ -10,7 +11,7 @@ class Tree;
 class TreeCursor {
 public:
 
-	TreeCursor(Node node, std::shared_ptr<Tree> tree);
+	TreeCursor(Node, std::shared_ptr<Tree>);
 	TreeCursor(TreeCursor&&);
 	~TreeCursor();
 

@@ -1,5 +1,4 @@
 #include "tree_cursor.hpp"
-#include "node.hpp"
 
 namespace ts {
 
