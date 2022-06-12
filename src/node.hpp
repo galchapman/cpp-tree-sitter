@@ -2,6 +2,7 @@
 
 #include <string>
 #include <memory>
+#include <vector>
 #include "ts.hpp"
 #include "children.hpp"
 #include "point.hpp"
@@ -12,9 +13,11 @@ namespace ts {
 
 class Tree;
 class TreeCursor;
+class Children;
 
 class Node {
 public:
+	Children children;
 
 	Node(TSNode, std::shared_ptr<Tree>);
 	~Node() = default;
@@ -44,10 +47,9 @@ public:
 	size_t childrenCount() const;
 	size_t namedChildrenCount() const;
 
-	Children children();
-	Children namedChildren();
-	Children childrenByFieldID(TSFieldId);
-	Children childrenByFieldName(const string& name);
+	std::vector<Node> namedChildren();
+	std::vector<Node> childrenByFieldID(TSFieldId);
+	std::vector<Node> childrenByFieldName(const string& name);
 
 	string sexp() const;
 
@@ -66,8 +68,9 @@ public:
 	Node prevNamedSibling();
 private:
 	TSNode node;
-	std::shared_ptr<Children> m_children = nullptr;
 	std::shared_ptr<Tree> tree;
+
+	friend class Children;
 };
 
 }

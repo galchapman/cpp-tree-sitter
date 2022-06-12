@@ -1,14 +1,16 @@
 #include "node.hpp"
 #include "tree.hpp"
 #include "tree_cursor.hpp"
+#include "exceptions.hpp"
 #include <ostream>
+#include "children.hpp"
 
 namespace ts {
 
 static TSTreeCursor cursor;
 
 Node::Node(TSNode node, std::shared_ptr<Tree> tree)
-	: node(node), tree(tree) {
+	: node(node), tree(tree), children(node, tree) {
 	if (ts_node_is_null(node)) {
 		throw NullNodeException();
 	}
@@ -79,33 +81,11 @@ size_t Node::namedChildrenCount() const {
 	return ts_node_named_child_count(node);
 }
 
-Children Node::children() {
-	if (m_children.get() == nullptr) {
-		auto children = std::make_shared<std::vector<Node>>();
-		auto size = (long)ts_node_child_count(node);
-		children->reserve(size);
-		if (size != 0) {
-			ts_tree_cursor_reset(&cursor, node);
-			ts_tree_cursor_goto_first_child(&cursor);
-
-			size_t i = 0;
-			do {
-				TSNode child = ts_tree_cursor_current_node(&cursor);
-				children->emplace_back(child, tree);
-				i++;
-			} while (ts_tree_cursor_goto_next_sibling(&cursor));
-		}
-
-		m_children = children;
-	}
-	return *m_children;
-}
-
-Children Node::namedChildren() {
+std::vector<Node> Node::namedChildren() {
 	size_t named_count = ts_node_named_child_count(node);
 	std::vector<Node> result;
 	result.reserve(named_count);
-	for (const auto& child : children()) {
+	for (const auto& child : children) {
 		if (child.isNamed()) {
 			result.emplace_back(child);
 		}
@@ -113,8 +93,8 @@ Children Node::namedChildren() {
 	return result;
 }
 
-Children Node::childrenByFieldID(TSFieldId id) {
-	Children result;
+std::vector<Node> Node::childrenByFieldID(TSFieldId id) {
+	std::vector<Node> result;
 	ts_tree_cursor_reset(&cursor, node);
     int ok = ts_tree_cursor_goto_first_child(&cursor);
 	while (ok) {
@@ -128,7 +108,7 @@ Children Node::childrenByFieldID(TSFieldId id) {
 	return result;
 } 
 
-Children Node::childrenByFieldName(const string& name) {
+std::vector<Node> Node::childrenByFieldName(const string& name) {
 	const TSLanguage *lang = ts_tree_language(tree->tree);
 	TSFieldId field_id = ts_language_field_id_for_name(lang, name.data(), name.length());
 	return childrenByFieldID(field_id);
