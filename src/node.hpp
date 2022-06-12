@@ -28,8 +28,7 @@ public:
 	Symbol symbol() const;
 	string text() const;
 
-	TreeCursor walk();
-	const TreeCursor walk() const;
+	TreeCursor walk() const;
 
 	bool isNamed() const;
 	bool isMissing() const;

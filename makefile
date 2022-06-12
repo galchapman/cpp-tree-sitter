@@ -12,7 +12,7 @@ SRCS = $(wildcard src/*.cpp)
 HDRS = $(wildcard src/*.hpp)
 OBJS = $(patsubst src/%.cpp,src/%.o,$(SRCS))
 
-all: libtree-sitter-cpp.a
+all: libtree-sitter-cpp.o
 
 libtree-sitter.o: $(wildcard src/core/lib/src/*.c) $(wildcard src/core/lib/src/*.h)
 	$(CC) $(CFLAGS) -c src/core/lib/src/lib.c -o $@

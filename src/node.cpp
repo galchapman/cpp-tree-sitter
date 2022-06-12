@@ -33,12 +33,8 @@ string Node::text() const {
 	return tree->text().substr(startByte(), endByte() - startByte());
 }
 
-TreeCursor Node::walk() {
+TreeCursor Node::walk() const {
 	return TreeCursor(*this, tree);
-}
-
-const TreeCursor Node::walk() const {
-	return const_cast<Node*>(this)->walk();
 }
 
 bool Node::isNamed() const {
