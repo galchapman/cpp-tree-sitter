@@ -89,7 +89,7 @@ def main(lang: str):
 		file.write(f'#pragma once\n\n')
 		file.write(f'#include "symbol.hpp"\n')
 		file.write(f'#include "tree_sitter/api.h"\n\n')
-		file.write(f'extern const TSLanguage *tree_sitter_{lang}(void);\n\n')
+		file.write(f'extern "C" const TSLanguage *tree_sitter_{lang}(void);\n\n')
 		file.write('namespace ts {\n\n')
 		file.write('namespace ' + lang + ' {\n\n')
 		file.write('const TSLanguage *language(void) {\n')

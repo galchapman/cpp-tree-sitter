@@ -9,8 +9,9 @@ build/
 *.dll
 *.lib
 
-tests/
 .vscode/
+
+# Languages
 
 languages/*.hpp
 languages/*_parser.c
