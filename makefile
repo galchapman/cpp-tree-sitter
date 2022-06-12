@@ -4,7 +4,7 @@ CCC=g++
 LD=ld
 AR=ar
 
-FLAGS=-Isrc/core/lib/src -Isrc/core/lib/include -g
+FLAGS=-Isrc/core/lib/src -Isrc/core/lib/include
 CFLAGS=$(FLAGS) -std=c99
 CCFLAGS=$(FLAGS) -std=c++20 
 

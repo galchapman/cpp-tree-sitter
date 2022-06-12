@@ -20,7 +20,6 @@ public:
 	}
 
 	Node rootNode();
-	const Node rootNode() const;
 
 	const string& text() const;
 

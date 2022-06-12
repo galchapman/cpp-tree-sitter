@@ -12,7 +12,7 @@ public:
 
 	std::shared_ptr<Tree> parse(const string& source, Tree* old_tree=nullptr, bool keep_text=true) const;
 
-	void setLanguge(const TSLanguage*);
+	void setLanguage(const TSLanguage*);
 private:
 	TSParser *parser;
 };

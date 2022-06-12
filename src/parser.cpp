@@ -16,7 +16,7 @@ std::shared_ptr<Tree> Parser::parse(const string& source, Tree* old_tree, bool k
 	return Tree::create(new_tree, source, keep_text);
 }
 
-void Parser::setLanguge(const TSLanguage* language) {
+void Parser::setLanguage(const TSLanguage* language) {
 	if (!language) {
 		throw NullLanguageException();
 	}

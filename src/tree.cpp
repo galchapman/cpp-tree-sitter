@@ -17,10 +17,6 @@ Node Tree::rootNode() {
 	return Node(ts_tree_root_node(tree), shared_from_this());
 }
 
-const Node Tree::rootNode() const {
-	return const_cast<Tree*>(this)->rootNode();
-}
-
 const string& Tree::text() const {
 	if (source.empty()) {
 		throw NullSourceException();
