@@ -16,8 +16,8 @@ public:
 	const char* name;
 };
 
-std::ostream& operator<<(std::ostream&, Symbol);
-
 }
 
 }
+
+extern std::ostream& operator<<(std::ostream&, ts::Symbol);

@@ -78,4 +78,4 @@ private:
 
 }
 
-std::ostream& operator<<(std::ostream& os, const ts::Node&);
+extern std::ostream& operator<<(std::ostream& os, const ts::Node&);

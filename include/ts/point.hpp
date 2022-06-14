@@ -8,4 +8,4 @@ using Point = TSPoint;
 	
 }
 
-std::ostream& operator<<(std::ostream&, const ts::Point&);
+extern std::ostream& operator<<(std::ostream&, const ts::Point&);

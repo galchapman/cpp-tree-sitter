@@ -15,4 +15,4 @@ bool operator!=(const ts::Range&, const ts::Range&);
 
 }
 
-std::ostream& operator<<(std::ostream&, const ts::Range&);
+extern std::ostream& operator<<(std::ostream&, const ts::Range&);
