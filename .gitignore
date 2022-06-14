@@ -16,3 +16,4 @@ build/
 languages/*.hpp
 languages/*.c
 languages/*.cc
+languages/*/

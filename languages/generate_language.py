@@ -5,22 +5,24 @@ import requests
 import sys
 import json
 import argparse
+import os
+import subprocess
 
 		
 languages = {
 	'Bash': ('tree-sitter', 'tree-sitter-bash'),
 	'C': ('tree-sitter', 'tree-sitter-c'),
-	'C#': ('tree-sitter', 'tree-sitter-c-sharp'),
-	'C++': ('tree-sitter', 'tree-sitter-cpp'),
+	'CSH': ('tree-sitter', 'tree-sitter-c-sharp'),
+	'CPP': ('tree-sitter', 'tree-sitter-cpp'),
 	'CommonLisp': ('theHamsta', 'tree-sitter-commonlisp'),
 	'CSS': ('tree-sitter', 'tree-sitter-css'),
 	'CUDA': ('theHamsta', 'tree-sitter-cuda'),
 	'DOT': ('rydesun', 'tree-sitter-dot'),
 	'Elm': ('elm-tooling', 'tree-sitter-elm'),
 	'EmacsLisp': ('Wilfred', 'tree-sitter-elisp'),
-	'Eno': ('eno-lang', 'tree-sitter-eno'),
-	'ERB/EJS': ('tree-sitter', 'tree-sitter-embedded-template'),
-	'Fennel': ('travonted', 'tree-sitter-fennel'),
+	# 'Eno': ('eno-lang', 'tree-sitter-eno'), currently not working
+	'ERB_EJS': ('tree-sitter', 'tree-sitter-embedded-template'),
+	# 'Fennel': ('travonted', 'tree-sitter-fennel'),
 	'GLSL': ('theHamsta', 'tree-sitter-glsl'),
 	'Go': ('tree-sitter', 'tree-sitter-go'),
 	'HCL': ('MichaHoffmann', 'tree-sitter-hcl'),
@@ -52,24 +54,52 @@ languages = {
 	'WGSL': ('mehmetoguzderin', 'tree-sitter-wgsl'),
 }
 
+if not os.path.exists('bin'):
+	os.mkdir('bin')
+
 alt_langauge_names = {
-	'cpp': 'C++'
+	'c++': 'CPP',
+	'c#': 'CSH',
+	'erb': 'ERB_EJS',
+	'ejs': 'ERB_EJS',
+	'erb/ejs': 'ERB_EJS',
 }
 
 for language in languages.keys():
 	alt_langauge_names[language.lower()] = language
 
 def get_sources(lang: str):
-	owener, reposotry = languages[alt_langauge_names[lang.lower()]]
-	url = f'https://api.github.com/repos/{owener}/{reposotry}/contents/src'
-	sources = []
-	for source in json.loads(requests.get(url).text):
-		# if source is a c or cpp source file
-		if source['name'].split('.')[-1] in ['c', 'cc', 'cpp', 'c++']:
-			sources.append(source['name'])
-			with open(lang + '_' + source['name'], 'wb') as file:
-				file.write(requests.get(source['download_url']).content)
-	return sources
+	if not os.path.exists(lang):
+		os.mkdir(lang)
+		owener, reposotry = languages[alt_langauge_names[lang.lower()]]
+		url = f'https://api.github.com/repos/{owener}/{reposotry}/contents/src'
+		sources = []
+		reponce = json.loads(requests.get(url).text)
+
+		if 'message' in reponce:
+			os.remove(lang)
+			raise Exception('Rate limit')
+
+		for source in reponce:
+			filename = f'{lang}/{source["name"]}'
+			ext = filename.split('.')[-1]
+			# if source is a c or cpp source file
+			if ext in ['c', 'cc', 'cpp', 'c++']:
+				sources.append(filename)
+			elif ext not in ['h', 'hpp', 'h++']:
+				continue
+
+			if not os.path.exists(filename):
+				with open(filename, 'wb') as file:
+					file.write(requests.get(source['download_url']).content)
+		return sources
+	else:
+		sources = []
+		for source in os.listdir(lang):
+			ext = source.split('.')[-1]
+			if ext in ['c', 'cc', 'cpp', 'c++']:
+				sources.append(source)
+		return sources
 
 
 def get_langaue_parser(lang: str):
@@ -82,8 +112,9 @@ def get_langaue_parser(lang: str):
 
 
 def install(lang: str):
+	sources = get_sources(lang)
 	
-	with open(f'{lang}_parser.c') as file:
+	with open(f'{lang}/parser.c') as file:
 		source = file.read()
 
 	lines = source.split('\n')
@@ -104,7 +135,7 @@ def install(lang: str):
 
 	with open(f'{lang}.hpp', 'w') as file:
 		file.write(f'#pragma once\n\n')
-		file.write(f'#include "symbol.hpp"\n')
+		file.write(f'#include "ts/symbol.hpp"\n')
 		file.write(f'#include "tree_sitter/api.h"\n\n')
 		file.write(f'extern "C" const TSLanguage *tree_sitter_{lang}(void);\n\n')
 		file.write('namespace ts {\n\n')
@@ -122,17 +153,33 @@ def install(lang: str):
 		file.write('\n}\n')
 		file.write('\n}\n')
 
+	for source in sources:
+		ext = source.split('.')[-1]
+		if ext in ['c']:
+			subprocess.run(['gcc', '--std=c99', '-I../../src/core/lib/include', '-c', source, '-o', '.'.join(source.split('.')[:-1]) + '.o'], cwd=lang)
+		elif ext in ['cc', 'cpp', 'c++']:
+			subprocess.run(['g++', '--std=c++20', '-I../../src/core/lib/include', '-c', source, '-o', '.'.join(source.split('.')[:-1]) + '.o'], cwd=lang)
+	
+	subprocess.run(['ld', '-r'] + ['.'.join(source.split('.')[:-1]) + '.o' for source in sources] + ['-o', f'../bin/{lang}.o'], cwd=lang)
+
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Manage tree sitter language packs')
 
 	parser.add_argument('--install', action='store_true')
 	parser.add_argument('--list', action='store_true')
+	parser.add_argument('--objs', action='store_true')
 	parser.add_argument('languages', nargs='?', type=str, default=[])
 
 	args = parser.parse_args(sys.argv[1:])
 
 	if args.list:
-		print(' '.join(languages.keys()))
+		print(' '.join(lang.lower() for lang in languages.keys()))
+	elif args.objs:
+		if isinstance(args.languages, list):
+			print('only one language is primmited on this operation')
+			exit(1)
+		print(' '.join(f'{args.languages}/{s.split(".")[0]}' for s in get_sources(args.languages)))
+
 	elif args.install:
 		if isinstance(args.languages, list):
 			for language in args.languages:
