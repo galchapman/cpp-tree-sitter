@@ -18,7 +18,20 @@ uint32_t Children::size() const {
 Children::iterator::iterator(const Children& children, uint32_t index)
 	: children(children), index(index) {}
 
+Children::iterator& Children::iterator::nextOfType(TSSymbol symbol) {
+	for (; index != children.size(); ++index) {
+		if (operator*().symbol() == symbol) {
+			break;
+		}
+	}
+	return *this;
+}
+
 Node Children::iterator::operator*() const {
+	return children[index];
+}
+
+Node Children::iterator::operator->() const {
 	return children[index];
 }
 

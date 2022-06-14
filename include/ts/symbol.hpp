@@ -12,6 +12,10 @@ public:
 	constexpr Symbol(TSSymbol symbol, const char* name)
 		: symbol(symbol), name(name) {}
 
+	inline operator TSSymbol() const {
+		return symbol;
+	}
+
 	TSSymbol symbol;
 	const char* name;
 };

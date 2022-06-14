@@ -6,7 +6,6 @@
 #include "ts.hpp"
 #include "children.hpp"
 #include "point.hpp"
-#include "symbol.hpp"
 #include "ts.hpp"
 
 extern "C" {
@@ -27,7 +26,7 @@ public:
 
 	long id() const;
 	string type() const;
-	Symbol symbol() const;
+	TSSymbol symbol() const;
 	string text() const;
 
 	TreeCursor walk() const;

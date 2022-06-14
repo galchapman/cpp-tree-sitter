@@ -27,8 +27,8 @@ string Node::type() const {
 	return ts_node_type(node);
 }
 
-Symbol Node::symbol() const {
-	return Symbol(ts_node_symbol(node), ts_node_type(node));
+TSSymbol Node::symbol() const {
+	return ts_node_symbol(node);
 }
 
 string Node::text() const {

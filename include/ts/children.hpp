@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ts.hpp"
+#include "ts/ts.hpp"
 
 #include <memory>
 
@@ -23,7 +23,11 @@ public:
 
 		iterator(const Children&, uint32_t);
 	public:
+		// Go to next child of type
+		iterator& nextOfType(TSSymbol);
+
 		Node operator*() const;
+		Node operator->() const;
 		iterator& operator++();
 
 		bool operator==(const iterator& other) const;
