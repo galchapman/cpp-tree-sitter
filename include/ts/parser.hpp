@@ -10,6 +10,7 @@ namespace ts {
 class Parser {
 public: 
 	Parser();
+	Parser(const TSLanguage*);
 	~Parser();
 
 	std::shared_ptr<Tree> parse(const string& source, Tree* old_tree=nullptr, bool keep_text=true) const;

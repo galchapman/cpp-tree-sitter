@@ -4,8 +4,12 @@
 
 namespace ts {
 
-Parser::Parser() {
-	parser = ts_parser_new();
+Parser::Parser()
+	: parser(ts_parser_new()) {}
+
+Parser::Parser(const TSLanguage* language)
+	: parser(ts_parser_new()) {
+	ts_parser_set_language(parser, language);
 }
 
 Parser::~Parser() {
