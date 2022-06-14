@@ -27,7 +27,7 @@ public:
 		iterator& nextOfType(TSSymbol);
 
 		Node operator*() const;
-		Node operator->() const;
+		std::unique_ptr<Node> operator->() const;
 		iterator& operator++();
 
 		bool operator==(const iterator& other) const;

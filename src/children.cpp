@@ -7,6 +7,7 @@ namespace ts {
 Children::Children(TSNode parent, std::shared_ptr<Tree> tree)
 	: parent(parent), tree(tree) {}
 
+
 Node Children::operator[](uint32_t index) const {
 	return Node(ts_node_child(parent, index), tree);
 }
@@ -31,8 +32,8 @@ Node Children::iterator::operator*() const {
 	return children[index];
 }
 
-Node Children::iterator::operator->() const {
-	return children[index];
+std::unique_ptr<Node> Children::iterator::operator->() const {
+	return std::unique_ptr<Node>(new Node(children[0]));
 }
 
 Children::iterator& Children::iterator::operator++() {
