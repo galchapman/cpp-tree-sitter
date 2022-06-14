@@ -3,6 +3,8 @@
 #include "ts.hpp"
 #include "node.hpp"
 
+extern "C" {
+
 namespace ts {
 
 class Node;
@@ -27,5 +29,7 @@ private:
 	Node *m_node;
 	std::shared_ptr<Tree> m_tree;
 };
+
+}
 
 }

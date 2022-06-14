@@ -6,6 +6,8 @@
 #include "node.hpp"
 #include <vector>
 
+extern "C" {
+
 namespace ts {
 
 class Node;
@@ -37,5 +39,7 @@ private:
 	friend class Node;
 	friend class Parser;
 };
+
+}
 
 }

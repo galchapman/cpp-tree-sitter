@@ -4,6 +4,7 @@
 
 #include <memory>
 
+extern "C" {
 
 namespace ts {
 
@@ -42,5 +43,7 @@ private:
 
 	friend class Node;
 };
+
+}
 
 }

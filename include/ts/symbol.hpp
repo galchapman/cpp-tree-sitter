@@ -3,6 +3,8 @@
 #include "tree_sitter/api.h"
 #include <ostream>
 
+extern "C" {
+
 namespace ts {
 
 class Symbol {
@@ -15,5 +17,7 @@ public:
 };
 
 std::ostream& operator<<(std::ostream&, Symbol);
+
+}
 
 }

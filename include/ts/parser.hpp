@@ -3,6 +3,8 @@
 #include "ts.hpp"
 #include "tree.hpp"
 
+extern "C" {
+
 namespace ts {
 
 class Parser {
@@ -16,5 +18,7 @@ public:
 private:
 	TSParser *parser;
 };
+
+}
 
 }

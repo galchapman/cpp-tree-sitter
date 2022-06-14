@@ -9,6 +9,8 @@
 #include "symbol.hpp"
 #include "ts.hpp"
 
+extern "C" {
+
 namespace ts {
 
 class Tree;
@@ -71,6 +73,8 @@ private:
 
 	friend class Children;
 };
+
+}
 
 }
 
