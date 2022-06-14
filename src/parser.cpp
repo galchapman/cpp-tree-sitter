@@ -1,5 +1,6 @@
-#include "parser.hpp"
-#include "exceptions.hpp"
+#include "ts/parser.hpp"
+
+#include "ts/exceptions.hpp"
 
 namespace ts {
 

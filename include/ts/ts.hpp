@@ -1,9 +1,10 @@
 #pragma once
 
+#include "tree_sitter/api.h"
+
 #include <string>
 #include <ostream>
 #include <memory>
-#include "core/lib/include/tree_sitter/api.h"
 
 namespace ts {
 

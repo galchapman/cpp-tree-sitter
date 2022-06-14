@@ -1,5 +1,7 @@
-#include "range.hpp"
-#include "point.hpp"
+#include "ts/range.hpp"
+
+#include "ts/point.hpp"
+
 #include <ostream>
 
 using ts::Range;

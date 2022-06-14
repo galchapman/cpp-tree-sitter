@@ -1,4 +1,4 @@
-#include "symbol.hpp"
+#include "ts/symbol.hpp"
 
 namespace ts {
 

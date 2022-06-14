@@ -1,9 +1,11 @@
-#include "node.hpp"
-#include "tree.hpp"
-#include "tree_cursor.hpp"
-#include "exceptions.hpp"
+#include "ts/node.hpp"
+
+#include "ts/tree.hpp"
+#include "ts/tree_cursor.hpp"
+#include "ts/exceptions.hpp"
+#include "ts/children.hpp"
+
 #include <ostream>
-#include "children.hpp"
 
 namespace ts {
 

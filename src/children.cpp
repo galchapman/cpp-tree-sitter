@@ -1,6 +1,6 @@
-#include "children.hpp"
-#include "tree.hpp"
-#include "node.hpp"
+#include "ts/children.hpp"
+#include "ts/tree.hpp"
+#include "ts/node.hpp"
 
 namespace ts {
 

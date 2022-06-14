@@ -1,6 +1,8 @@
-#include "tree.hpp"
-#include "node.hpp"
-#include "tree_cursor.hpp"
+#include "ts/tree.hpp"
+
+#include "ts/node.hpp"
+#include "ts/tree_cursor.hpp"
+#include "ts/exceptions.hpp"
 
 namespace ts {
 
