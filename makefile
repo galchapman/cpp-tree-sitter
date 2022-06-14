@@ -4,7 +4,7 @@ CCC=g++
 LD=ld
 AR=ar
 
-FLAGS=-Isrc/core/lib/src -Isrc/core/lib/include
+FLAGS=-Iinclude -Isrc/core/lib/include
 CFLAGS=$(FLAGS) -std=c99
 CCFLAGS=$(FLAGS) -std=c++20 
 
@@ -15,7 +15,7 @@ OBJS = $(patsubst src/%.cpp,src/%.o,$(SRCS))
 all: libtree-sitter-cpp.o
 
 libtree-sitter.o: $(wildcard src/core/lib/src/*.c) $(wildcard src/core/lib/src/*.h)
-	$(CC) $(CFLAGS) -c src/core/lib/src/lib.c -o $@
+	$(CC) $(CFLAGS) -Isrc/core/lib/src -c src/core/lib/src/lib.c -o $@
 
 libtree-sitter-cpp.o: $(OBJS) libtree-sitter.o
 	$(LD) -r $^ -o $@
