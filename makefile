@@ -41,7 +41,7 @@ dlibtree-sitter-cpp.a: $(BIN)/dlibtree-sitter-cpp.o
 tree-sitter-cpp.so: $(BIN)/libtree-sitter-cpp.o
 	$(CCC) -shared $^ -o $@
 
-dtree-sitter-cpp.so: $(BIN)/libtree-sitter-cpp.o
+dtree-sitter-cpp.so: $(BIN)/dlibtree-sitter-cpp.o
 	$(CCC) -shared $^ -o $@
 
 $(BIN)/%.o: src/%.cpp $(HDRS)
