@@ -19,12 +19,12 @@ public:
 	
 	class iterator {
 		uint32_t index;
-		const Children &children;
+		const Children *children;
 
-		iterator(const Children&, uint32_t);
+		iterator(const Children*, uint32_t);
 	public:
-		// Go to next child of type
-		iterator& nextOfType(TSSymbol);
+		// Move to next (including current) node with symbol type
+		iterator& findSymbol(TSSymbol);
 
 		Node operator*() const;
 		std::unique_ptr<Node> operator->() const;

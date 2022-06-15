@@ -16,24 +16,21 @@ uint32_t Children::size() const {
 	return ts_node_child_count(parent);
 }
 
-Children::iterator::iterator(const Children& children, uint32_t index)
+Children::iterator::iterator(const Children* children, uint32_t index)
 	: children(children), index(index) {}
 
-Children::iterator& Children::iterator::nextOfType(TSSymbol symbol) {
-	for (; index != children.size(); ++index) {
-		if (operator*().symbol() == symbol) {
-			break;
-		}
-	}
+Children::iterator& Children::iterator::findSymbol(TSSymbol symbol) {
+	for (; index != children->size() && ts_node_symbol(ts_node_child(children->parent, index)) != symbol; ++index)
+		;
 	return *this;
 }
 
 Node Children::iterator::operator*() const {
-	return children[index];
+	return (*children)[index];
 }
 
 std::unique_ptr<Node> Children::iterator::operator->() const {
-	return std::unique_ptr<Node>(new Node(children[0]));
+	return std::unique_ptr<Node>(new Node((*children)[0]));
 }
 
 Children::iterator& Children::iterator::operator++() {
@@ -42,19 +39,19 @@ Children::iterator& Children::iterator::operator++() {
 }
 
 bool Children::iterator::operator==(const iterator& other) const {
-	return (&children == &other.children) && (index == other.index);
+	return (children == other.children) && (index == other.index);
 }
 
 bool Children::iterator::operator!=(const iterator& other) const {
-	return (&children != &other.children) || (index != other.index);
+	return (children != other.children) || (index != other.index);
 }
 
 Children::iterator Children::begin() const {
-	return iterator(*this, 0);
+	return iterator(this, 0);
 }
 
 Children::iterator Children::end() const {
-	return iterator(*this, size());
+	return iterator(this, size());
 }
 
 }
