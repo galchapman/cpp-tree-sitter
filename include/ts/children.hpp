@@ -19,10 +19,12 @@ public:
 	
 	class iterator {
 		uint32_t index;
-		const Children *children;
+		TSNode parent;
+		std::shared_ptr<Tree> tree;
 
-		iterator(const Children*, uint32_t);
+		iterator(TSNode, std::shared_ptr<Tree>, uint32_t);
 	public:
+		iterator() = default;
 		// Move to next (including current) node with symbol type
 		iterator& findSymbol(TSSymbol);
 
