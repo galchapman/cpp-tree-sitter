@@ -14,3 +14,6 @@ PYTHON=python
 
 languages.so: $(wildcard bin/*.o)
 	$(CCC) -shared $^ -o $@
+
+languages.o: $(wildcard bin/*.o)
+	$(LD) -r $^ -o $@
