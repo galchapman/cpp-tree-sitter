@@ -7,7 +7,7 @@ import json
 import argparse
 import os
 import subprocess
-
+import time
 		
 languages = {
 	'Bash': ('tree-sitter', 'tree-sitter-bash'),
@@ -152,6 +152,8 @@ def install(lang: str):
 
 		file.write('\n}\n')
 		file.write('\n}\n')
+	
+	time.sleep(0.5)
 
 	for source in sources:
 		ext = source.split('.')[-1]
