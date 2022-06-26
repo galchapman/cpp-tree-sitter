@@ -127,11 +127,11 @@ Node Node::getChildByFieldName(string name) {
 	return Node(ts_node_child_by_field_name(node, name.c_str(), name.length()), tree);
 }
 
-const Node Node::getChildByFieldID(TSFieldId field_id) const {
+Node Node::getChildByFieldID(TSFieldId field_id) const {
 	return Node(ts_node_child_by_field_id(node, field_id), tree);
 }
 
-const Node Node::getChildByFieldName(string name) const {
+Node Node::getChildByFieldName(string name) const {
 	return Node(ts_node_child_by_field_name(node, name.c_str(), name.length()), tree);
 }
 

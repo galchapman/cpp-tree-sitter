@@ -56,8 +56,8 @@ public:
 	Node getChildByFieldID(TSFieldId field_id);
 	Node getChildByFieldName(string name);
 
-	const Node getChildByFieldID(TSFieldId field_id) const;
-	const Node getChildByFieldName(string name) const;
+	Node getChildByFieldID(TSFieldId field_id) const;
+	Node getChildByFieldName(string name) const;
 
 	string getChildFiledName(size_t index) const;
 
