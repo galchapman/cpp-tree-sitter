@@ -10,7 +10,7 @@ FLAGS=-Iinclude -Isrc/core/lib/include -fpic
 DFLAGS=-g
 RFLAGS=-O3
 CFLAGS=$(FLAGS) -std=c99
-CCFLAGS=$(FLAGS) -std=c++20
+CCFLAGS=$(FLAGS) -std=c++20 -nostdlib
 
 SRCS = $(wildcard src/*.cpp)
 HDRS = $(wildcard src/*.hpp)
