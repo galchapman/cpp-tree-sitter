@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import re
+from typing import NamedTuple
 import requests
 import sys
 import json
@@ -119,23 +120,63 @@ def install(lang: str):
 
 	lines = source.split('\n')
 
+	# Symbols
+
 	enum_start = lines.index('enum {')
 	enum_end = lines.index('};')
 
-	symbols = {}
-	symbols['ts_builtin_sym_error'] = -1
-	symbols['ts_builtin_sym_end'] = 0
+	symbols_id = {}
+	symbols_id['ts_builtin_sym_error'] = -1
+	symbols_id['ts_builtin_sym_end'] = 0
 	for line in lines[enum_start+1:enum_end]:
 		m = re.search('([a-zA-Z_0-9]+) = (\d+),', line)
 		name, value = m.groups()
-		symbols[name] = int(value)
+		symbols_id[name] = int(value)
 
 	names_start = lines.index('static const char * const ts_symbol_names[] = {')
+	names_end = names_start + lines[names_start:].index('};')
+
+	Symbol = NamedTuple('Symbol', name=str, id=int, text=str)
+
+	symbols: list[Symbol] = []
+
+	for line in lines[names_start+1:names_end]:
+		m = re.search(r'\[([a-zA-Z_0-9]+)\] = (".*"),', line)
+		name, string_value = m.groups()
+		symbols.append(Symbol(name=name.removeprefix('ts_builtin_').removeprefix('anon_').removeprefix('aux_').removeprefix('alias_').removeprefix('sym_') + '_sym', id=symbols_id[name], text=string_value))
+
+	# Skip symbols
+	lines = lines[names_end+1:]
+
+	# Fields
+
+	enum_start = lines.index('enum {')
+	enum_end = enum_start + lines[enum_start:].index('};')
+	fields_id = {}
+	for line in lines[enum_start+1:enum_end]:
+		m = re.search('([a-zA-Z_0-9]+) = (\d+),', line)
+		name, value = m.groups()
+		fields_id[name] = int(value)
+	
+	names_start = lines.index('static const char * const ts_field_names[] = {')
 	names_end = lines[names_start:].index('};')
+
+	Field = NamedTuple('Field', name=str, id=int, text=str)
+
+	fields: list[Field] = []
+
+	for line in lines[names_start+1:names_start+names_end]:
+		m = re.search(r'\[([a-zA-Z_0-9]+)\] = (".*"),', line)
+		if m:
+			name, string_value = m.groups()
+			fields.append(Symbol(name=name.removeprefix('field_')+'_field', id=fields_id[name], text=string_value))
+
+
 
 	with open(f'{lang}.hpp', 'w') as file:
 		file.write(f'#pragma once\n\n')
 		file.write(f'#include "ts/symbol.hpp"\n')
+		file.write(f'#include "ts/field.hpp"\n')
 		file.write(f'#include "tree_sitter/api.h"\n\n')
 		file.write(f'extern "C" const TSLanguage *tree_sitter_{lang}(void);\n\n')
 		file.write('namespace ts {\n\n')
@@ -144,16 +185,20 @@ def install(lang: str):
 		file.write(f'\treturn tree_sitter_{lang}();\n')
 		file.write('}\n\n')
 		
-	
-		for line in lines[names_start+1:names_start+names_end]:
-			m = re.search(r'\[([a-zA-Z_0-9]+)\] = (".*"),', line)
-			name, string_value = m.groups()
-			file.write(f'constexpr Symbol {name} = Symbol({symbols[name]}, {string_value});\n')
+		file.write('namespace symbols {\n')
+		for symbol in symbols:
+			file.write(f'\tconstexpr Symbol {symbol.name} = Symbol({symbol.id}, {symbol.text});\n')
+		file.write('}\n\n')
+
+		file.write('namespace fields {\n')
+		for field in fields:
+			file.write(f'\tconstexpr Field {field.name} = Field({field.id}, {field.text});\n')
+		file.write('}\n\n')
 
 		file.write('\n}\n')
 		file.write('\n}\n')
-	
-	time.sleep(0.5)
+
+		file.flush()
 
 	for source in sources:
 		ext = source.split('.')[-1]
