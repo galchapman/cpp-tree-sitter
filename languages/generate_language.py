@@ -57,7 +57,7 @@ languages = {
 if not os.path.exists('bin'):
 	os.mkdir('bin')
 
-alt_langauge_names = {
+alt_language_names = {
 	'c++': 'CPP',
 	'c#': 'CSH',
 	'erb': 'ERB_EJS',
@@ -66,21 +66,21 @@ alt_langauge_names = {
 }
 
 for language in languages.keys():
-	alt_langauge_names[language.lower()] = language
+	alt_language_names[language.lower()] = language
 
 def get_sources(lang: str):
 	if not os.path.exists(lang):
 		os.mkdir(lang)
-		owener, reposotry = languages[alt_langauge_names[lang.lower()]]
-		url = f'https://api.github.com/repos/{owener}/{reposotry}/contents/src'
+		owner, repository = languages[alt_language_names[lang.lower()]]
+		url = f'https://api.github.com/repos/{owner}/{repository}/contents/src'
 		sources = []
-		reponce = json.loads(requests.get(url).text)
+		response = json.loads(requests.get(url).text)
 
-		if 'message' in reponce:
+		if 'message' in response:
 			os.remove(lang)
 			raise Exception('Rate limit')
 
-		for source in reponce:
+		for source in response:
 			filename = f'{lang}/{source["name"]}'
 			ext = filename.split('.')[-1]
 			# if source is a c or cpp source file
@@ -102,13 +102,13 @@ def get_sources(lang: str):
 		return sources
 
 
-def get_langaue_parser(lang: str):
-	base_url = languages[alt_langauge_names[lang]]
+def get_language_parser(lang: str):
+	base_url = languages[alt_language_names[lang]]
 	url = base_url.replace('github.com', 'raw.githubusercontent.com') + '/master/src/parser.c'
-	responce = requests.get(url)
-	if (responce.status_code != requests.status_codes.codes['ok']):
+	response = requests.get(url)
+	if (response.status_code != requests.status_codes.codes['ok']):
 		raise Exception("Invalid request url")
-	return responce.text
+	return response.text
 
 
 def install(lang: str):
@@ -178,7 +178,7 @@ if __name__ == '__main__':
 		print(' '.join(lang.lower() for lang in languages.keys()))
 	elif args.objs:
 		if isinstance(args.languages, list):
-			print('only one language is primmited on this operation')
+			print('only one language allowed at a time on this operation')
 			exit(1)
 		print(' '.join(f'{args.languages}/{s.split(".")[0]}' for s in get_sources(args.languages)))
 
@@ -190,6 +190,6 @@ if __name__ == '__main__':
 			install(args.languages)
 	else:
 		if isinstance(args.languages, list):
-			print('only one language is primmited on this operation')
+			print('only one language allowed at a time on this operation')
 			exit(1)
 		print(' '.join(get_sources(args.languages)))
