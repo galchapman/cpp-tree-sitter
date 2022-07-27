@@ -143,7 +143,7 @@ def install(lang: str):
 	for line in lines[names_start+1:names_end]:
 		m = re.search(r'\[([a-zA-Z_0-9]+)\] = (".*"),', line)
 		name, string_value = m.groups()
-		symbols.append(Symbol(name=name.removeprefix('ts_builtin_').removeprefix('anon_').removeprefix('aux_').removeprefix('alias_').removeprefix('sym_') + '_sym', id=symbols_id[name], text=string_value))
+		symbols.append(Symbol(name=name, id=symbols_id[name], text=string_value))
 
 	# Skip symbols
 	lines = lines[names_end+1:]
@@ -169,7 +169,7 @@ def install(lang: str):
 		m = re.search(r'\[([a-zA-Z_0-9]+)\] = (".*"),', line)
 		if m:
 			name, string_value = m.groups()
-			fields.append(Symbol(name=name.removeprefix('field_')+'_field', id=fields_id[name], text=string_value))
+			fields.append(Symbol(name=name, id=fields_id[name], text=string_value))
 
 
 
